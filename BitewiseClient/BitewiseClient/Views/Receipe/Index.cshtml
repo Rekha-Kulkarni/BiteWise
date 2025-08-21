@@ -1,0 +1,27 @@
+﻿
+@model IEnumerable<BitewiseClient.Models.Receipe>
+@using BitewiseClient.Pages   <!-- Namespace of Blazor components -->
+
+@{
+    ViewData["Title"] = "Recipes";
+}
+
+<h2>Recipes</h2>
+
+<!-- Loop through recipes and render basic info -->
+<ul>
+@foreach (var recipe in Model)
+{
+    <li>
+        <strong>@recipe.Name</strong> - @recipe.Calories calories
+        <br />
+        @recipe.Description
+        <br />
+
+        <!-- Render Blazor component for interactive part -->
+        <component type="typeof(RecipeCard)" 
+                   render-mode="ServerPrerendered" 
+                   param-Recipe="recipe" />
+    </li>
+}
+</ul>

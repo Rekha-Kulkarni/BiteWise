@@ -1,0 +1,30 @@
+﻿@using BitewiseClient.Models
+@code {
+    [Parameter]
+    public Receipe? Recipe { get; set; }
+
+    private bool showIngredients = false;
+
+    private void ToggleIngredients()
+    {
+        showIngredients = !showIngredients;
+    }
+}
+
+<div class="card" style="border: 1px solid #ccc; padding: 10px; margin: 5px;">
+    <h3>@Recipe?.Name</h3>
+    <p>Calories: @Recipe?.Calories</p>
+    <button class="btn btn-primary" @onclick="ToggleIngredients">
+        @(showIngredients ? "Hide Ingredients" : "Show Ingredients")
+    </button>
+
+    @if (showIngredients && Recipe?.Ingredients != null)
+    {
+        <ul>
+            @foreach (var ing in Recipe.Ingredients)
+            {
+                <li>@ing.Quantity @ing.Unit @ing.Name</li>
+            }
+        </ul>
+    }
+</div>
