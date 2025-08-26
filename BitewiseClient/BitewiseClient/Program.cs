@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add application services
 builder.Services.AddScoped<ReceipeService>();
+builder.Services.AddScoped<ShoppingListService>();
 
 var app = builder.Build();
 
@@ -45,3 +46,10 @@ app.MapBlazorHub();
 app.MapFallbackToController("Index", "Home");
 
 app.Run();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    SeedData.Initialize(context);
+}

@@ -1,22 +1,45 @@
 ﻿@using BitewiseClient.Models
+@using BitewiseClient.Services
+@inject ShoppingListService ShoppingService
+
 @code {
     [Parameter]
     public Receipe? Recipe { get; set; }
 
     private bool showIngredients = false;
+    private string message = string.Empty;
 
-    private void ToggleIngredients()
+    private void ToggleIngredients() => showIngredients = !showIngredients;
+
+    private void AddToShoppingList()
     {
-        showIngredients = !showIngredients;
+        if (Recipe?.Ingredients != null)
+        {
+            ShoppingService.AddIngredients(Recipe.Ingredients);
+            message = "Ingredients added to your shopping list!";
+        }
     }
+
+    private int TotalCalories() => Recipe?.Calories ?? 0;
 }
 
 <div class="card" style="border: 1px solid #ccc; padding: 10px; margin: 5px;">
     <h3>@Recipe?.Name</h3>
-    <p>Calories: @Recipe?.Calories</p>
-    <button class="btn btn-primary" @onclick="ToggleIngredients">
+    <p><strong>Calories:</strong> @TotalCalories()</p>
+    <p>@Recipe?.Description</p>
+
+    <button class="btn btn-sm btn-info" @onclick="ToggleIngredients">
         @(showIngredients ? "Hide Ingredients" : "Show Ingredients")
     </button>
+
+    <button class="btn btn-sm btn-success" @onclick="AddToShoppingList">
+        Add to Shopping List
+    </button>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <p style="color: green;">@message</p>
+    }
 
     @if (showIngredients && Recipe?.Ingredients != null)
     {

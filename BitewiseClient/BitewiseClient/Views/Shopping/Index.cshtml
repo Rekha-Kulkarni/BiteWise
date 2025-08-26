@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IReadOnlyList<BitewiseClient.Models.Ingredient>
+
 @{
+    ViewData["Title"] = "Shopping List";
 }
+
+<h2>Shopping List</h2>
+
+@if (!Model.Any())
+{
+    <p>Your shopping list is empty.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Ingredient</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Unit</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form asp-action="Clear" method="post">
+        <button type="submit" class="btn btn-danger">Clear List</button>
+    </form>
+}
+
